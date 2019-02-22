@@ -1,0 +1,28 @@
+﻿@model saboteur.ViewModels.Season.SeasonViewModel
+@{
+    ViewData["Title"] = "Season";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    ul li a {
+        color: wheat;
+    }
+
+    .option-container {
+        height: 266px;
+    }
+</style>
+<h2>Episodes</h2>
+
+@await Html.PartialAsync("_GreenFingerprint")
+<div class="option-container player-container">
+    <h3 class="yellow-font">Episode</h3>
+    <ul>
+        @for(var i = 0; i < Model.Episodes.Count; i++)
+        {
+            Episode episode = Model.Episodes[i];
+            <li>@episode.Title <a href="/Episode/Watch/@episode.Season.Country/@episode.Season.CountrySeasonNum/@episode.EpisodeId">Watch</a> <a href="/Quiz/Season/@episode.SeasonId/@episode.Quiz.QuizId">Quiz</a> <a href="/Execution/Season/@episode.SeasonId/@episode.EpisodeId">Execution</a></li>
+        }
+    </ul>
+</div>

@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewData["Title"] = "Season";
+}
+<style>
+    ul li {
+        display: inline-flex;
+        list-style: none;
+        margin: 5px;
+    }
+    ul li a{
+        color: wheat;
+    }
+</style>
+@await Html.PartialAsync("_GreenFingerprint")
+
+<div class="option-container player-container">
+    <h3 class="yellow-font">US Season 1</h3>
+    <ul>
+        <li><a href="/Episode/Index">Episodes</a></li>
+        <li><a href="/Player/Index">Players</a></li>
+        @*<li><a href="/Quiz/Index">Quizzes</a></li>*@
+        <li><a href="/Journal/Index">Journal</a></li>
+        <li><a href="/Journal/Index">Friends</a></li>
+        @*<li><a href="/Execution/Index">Executions</a></li>*@
+    </ul>
+</div>

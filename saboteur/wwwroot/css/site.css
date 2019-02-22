@@ -1,0 +1,166 @@
+﻿.bg-color-black {
+    background-color: #000000;
+}
+
+.bg-color-red {
+    background-color: #FF0000;
+}
+
+.bg-color-green {
+    background-color: #36DD13;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.grid {
+    /* display: grid; */
+    /* grid-template: 20px 1fr 20px / 20px 1fr 20px; */
+    height: 100vh;
+    margin: 0 auto;
+}
+
+.image {
+    /* grid-area: 2 / 2 / 2 / 2; */
+    min-height: 0;
+    min-width: 0;
+}
+
+img.fingerprint {
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+    box-sizing: border-box;
+    display: block;
+    /* object-fit: contain; */
+    height: 100vh;
+    margin: 0 auto;
+    border: 0;
+    padding: 3px;
+    z-index: 100;
+}
+
+.player-container {
+    z-index: 1000;
+    grid-area: 2 / 2 / 2 / 2;
+    min-height: 0;
+    background-origin: border-box;
+    /*border: 8px solid transparent;   
+     outline: thick ridge 
+    border-left-color: linear-gradient(red,black);
+    border-style: outset;*/
+    width: 400px;
+    height: 100px;
+    /*background-color: red;  For browsers that do not support gradients */
+    background-image: linear-gradient(red, black);
+    position: absolute;
+    margin: 0 auto;
+    top: Calc(50% - 50px);
+    bottom: Calc(50% - 50px);
+    left: Calc(50% - 200px);
+    right: Calc(50% - 200px);
+}
+
+h3 {
+    color: yellow;
+    text-align: center;
+    font-size: 40px;
+    margin: 0;
+    font-family: sans-serif;
+    text-shadow: 2px 2px #000000;
+}
+
+.player-container input, #seasonId {
+    height: 40px;
+    width: calc(100% - 80px);
+    margin: 0 auto;
+    display: block;
+    text-transform: uppercase;
+    font-size: 40px;
+    font-weight: bold;
+    font-family: sans-serif;
+    text-align: center;
+}
+
+#seasonId {
+    height: 40px;
+    font-size: 30px;
+}
+
+.question-layout {
+    z-index: 1000;
+    grid-area: 2 / 2 / 2 / 2;
+}
+
+.question-header {
+    min-height: 0;
+    background-origin: border-box;
+    border: 8px solid blue;
+    /* outline: thick ridge */
+    border-style: outset;
+    background-color: blue;
+    width: Calc(100% - 100px);
+    height: 100px;
+    /*background-color: red;  For browsers that do not support gradients */
+    position: absolute;
+    margin: 0 auto;
+    top: 50px;
+    left: 50px;
+    text-align: left;
+}
+
+    .question-header h3 {
+        float: left;
+    }
+
+.question-choices {
+    list-style: none;
+    position: absolute;
+    margin: 0 auto;
+    top: 200px;
+    left: -10px;
+    text-align: left;
+    font-family: sans-serif;
+}
+
+    .question-choices li {
+        margin: 10px 0px 10px 0px;
+        color: #ffffff;
+        text-shadow: 2px 2px #000000;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .question-choices span {
+        background: #B1B6CE;
+        padding: 0px 10px 0px 10px;
+        color: #000000;
+        text-shadow: none;
+    }
+
+.screen {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 0;
+}
+
+div.watchEpisode {
+    z-index: 1000;
+    position: absolute;
+    top: Calc(50% - 157.5px);
+    left: Calc(50% - 280px);
+    right: 20%;
+    bottom: 20%;
+}
+
+.fp-overlay{
+    z-index: 1000;
+    position: absolute;
+}

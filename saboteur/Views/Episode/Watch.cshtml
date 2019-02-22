@@ -1,0 +1,31 @@
+﻿@model saboteur.ViewModels.Episode.WatchEpisodeViewModel
+@{
+    ViewData["Title"] = "Watch";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.Episode.Season.Country Season @Model.Episode.Season.CountrySeasonNum - @Model.Episode.Title</h2>
+
+@await Html.PartialAsync("_GreenFingerprint")
+
+@if (Model.PreQuiz)
+{
+    <div class="watchEpisode">
+        <iframe width="560" height="315" src="@Model.Episode.PreQuizPublicUrl" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <div>
+            <a href="/Season/@Model.Episode.Season.Country/@Model.Episode.Season.CountrySeasonNum">Season</a>
+            <a href="/Quiz/@Model.Episode.Season.Country/@Model.Episode.Season.CountrySeasonNum/@Model.Episode.EpisodeNum">Take the Quiz</a>
+            <a href="/Episode/Watch/@Model.Episode.Season.Country/@Model.Episode.Season.CountrySeasonNum/@Model.Episode.EpisodeNum?preQuiz=false">Continue Episode</a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="watchEpisode">
+        <iframe class="episode" width="560" height="315" src="@Model.Episode.PostQuizPublicUrl" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <div>
+            <a href="/Season/@Model.Episode.Season.Country/@Model.Episode.Season.CountrySeasonNum">Season</a>
+            <a href="/Execution/@Model.Episode.Season.Country/@Model.Episode.Season.CountrySeasonNum/@Model.Episode.EpisodeNum">Start Execution</a>
+        </div>
+    </div>
+}

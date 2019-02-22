@@ -1,0 +1,21 @@
+﻿@model saboteur.ViewModels.Home.IndexViewModel
+@{
+    ViewData["Title"] = "Saboteur";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .option-container h3 {
+        margin-bottom: 7px;
+    }
+</style>
+
+@await Html.PartialAsync("_GreenFingerprint")
+<div class="option-container player-container">
+    <h3 class="yellow-font">Options</h3>
+    <ul>
+        @for (var i = 0; i < Model.Seasons.Count; i++)
+        {
+            <li><a href="/Season/@Model.Seasons[i].Country/@Model.Seasons[i].CountrySeasonNum">@Model.Seasons[i].Country @Model.Seasons[i].CountrySeasonNum</a></li>
+        }
+    </ul>
+</div>
