@@ -7,6 +7,6 @@ namespace saboteur.ViewModels.Season
 {
     public class SeasonViewModel
     {
-        public List<saboteur.Models.Episode> Episodes { get; set; }
+        public List<saboteur.Models.Game.Episode> Episodes { get; set; }
     }
 }

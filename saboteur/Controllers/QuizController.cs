@@ -20,7 +20,7 @@ namespace saboteur.Controllers
         [Route("Quiz/{country}/{countrySeasonNum}/{episodeNum}")]
         public IActionResult Quiz(string country, int countrySeasonNum, int episodeNum)
         {
-            var vm = new QuizPageViewModel();
+            var vm = new QuizViewModel();
             vm.Quiz = _gameData.GetQuiz(country, countrySeasonNum, episodeNum);
 
             return View(vm);

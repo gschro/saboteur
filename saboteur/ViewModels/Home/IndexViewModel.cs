@@ -8,6 +8,6 @@ namespace saboteur.ViewModels.Home
 {
     public class IndexViewModel
     {
-        public List<saboteur.Models.Season> Seasons { get; set; }
+        public List<saboteur.Models.Game.Season> Seasons { get; set; }
     }
 }

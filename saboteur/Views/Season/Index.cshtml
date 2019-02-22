@@ -1,4 +1,5 @@
 ﻿@model saboteur.ViewModels.Season.SeasonViewModel
+@using saboteur.Models.Game
 @{
     ViewData["Title"] = "Season";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -22,7 +23,7 @@
         @for(var i = 0; i < Model.Episodes.Count; i++)
         {
             Episode episode = Model.Episodes[i];
-            <li>@episode.Title <a href="/Episode/Watch/@episode.Season.Country/@episode.Season.CountrySeasonNum/@episode.EpisodeId">Watch</a> <a href="/Quiz/Season/@episode.SeasonId/@episode.Quiz.QuizId">Quiz</a> <a href="/Execution/Season/@episode.SeasonId/@episode.EpisodeId">Execution</a></li>
+            <li>@episode.Title <a href="/Episode/Watch/@episode.Season.Country/@episode.Season.CountrySeasonNum/@episode.EpisodeId">Watch</a> <a href="/Quiz/@episode.Season.Country/@episode.Season.CountrySeasonNum/@episode.EpisodeNum">Quiz</a> <a href="/Execution/Season/@episode.SeasonId/@episode.EpisodeId">Execution</a></li>
         }
     </ul>
 </div>

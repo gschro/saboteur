@@ -7,7 +7,7 @@ namespace saboteur.ViewModels.Episode
 {
     public class WatchEpisodeViewModel
     {
-        public saboteur.Models.Episode Episode { get; set; }
+        public saboteur.Models.Game.Episode Episode { get; set; }
         public bool PreQuiz { get; set; }
     }
 }
