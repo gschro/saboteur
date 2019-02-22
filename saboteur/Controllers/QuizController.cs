@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using saboteur.Interfaces;
+using saboteur.ViewModels.Quiz;
 
 namespace saboteur.Controllers
 {
@@ -16,10 +17,13 @@ namespace saboteur.Controllers
             _gameData = gameData;
         }
 
-        public IActionResult Index()
+        [Route("Quiz/{country}/{countrySeasonNum}/{episodeNum}")]
+        public IActionResult Quiz(string country, int countrySeasonNum, int episodeNum)
         {
+            var vm = new QuizPageViewModel();
+            vm.Quiz = _gameData.GetQuiz(country, countrySeasonNum, episodeNum);
 
-            return View();
+            return View(vm);
         }
     }
 }

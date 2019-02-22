@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace saboteur.Models
+namespace saboteur.Models.Game
 {
     public class Reference
     {

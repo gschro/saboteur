@@ -9,6 +9,5 @@ namespace saboteur.ViewModels.Quiz
     public class QuizViewModel
     {
         public saboteur.Models.Game.Quiz Quiz { get; set; }
-        public List<QuizQuestion> QuizQuestions { get; set; }
     }
 }

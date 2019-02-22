@@ -3,6 +3,7 @@ using saboteur.Data;
 using saboteur.Interfaces;
 using saboteur.Models;
 using saboteur.Models;
+using saboteur.Models.Game;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,11 @@ namespace saboteur.Services
             return _db.Episodes.Include(n=>n.Quiz).Where(n => n.SeasonId == seasonId);
         }
 
+        public Episode GetEpisodeBySeason(int seasonId, int episodeNum)
+        {
+            return _db.Episodes.First(n => n.SeasonId == seasonId && n.EpisodeNum == episodeNum);
+        }
+
         public Season GetSeasonByCountryNum(string country, int countrySeasonNum)
         {
             return _db.Seasons.First(n => n.Country == country && n.CountrySeasonNum == countrySeasonNum);
@@ -34,9 +40,11 @@ namespace saboteur.Services
             return _db.Seasons.OrderBy(n=>n.Country).ThenBy(n=>n.CountrySeasonNum);
         }
 
-        public Episode GetEpisodeBySeason(int seasonId, int episodeNum)
+        public Quiz GetQuiz(string country, int countrySeasonNum, int episodeNum)
         {
-            return _db.Episodes.First(n => n.SeasonId == seasonId && n.EpisodeNum == episodeNum);
+            var season = GetSeasonByCountryNum(country, countrySeasonNum);
+            var episode = GetEpisodeBySeason(season.SeasonId, episodeNum);
+            return _db.Quizzes.First(n => n.EpisodeId == episode.EpisodeId);
         }
     }
 }
