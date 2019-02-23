@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace saboteur.ViewModels.Quiz
 {
-    public class QuizViewModel
+    public class QuizQuestionViewModel
     {
-        public saboteur.Models.Game.Quiz Quiz { get; set; }
+        public saboteur.Models.Game.QuizQuestion QuizQuestion { get; set; }
         public saboteur.Models.Game.Season Season { get; set; }
     }
 }

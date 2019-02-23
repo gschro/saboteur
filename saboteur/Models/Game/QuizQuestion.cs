@@ -13,11 +13,13 @@ namespace saboteur.Models.Game
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid QuizQuestionId { get; set; }
         public int EpisodeId { get; set; }
+        public int QuizId { get; set; }
         public int Order { get; set; }
         [MaxLength(200)]
         public string Question { get; set; }
 
         public List<QuizQuestionChoice> QuizQuestionChoices { get; set; }
         public Episode Episode { get; set; }
+        public Quiz Quiz { get; set; }
     }
 }

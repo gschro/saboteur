@@ -86,6 +86,10 @@ h3 {
     text-align: center;
 }
 
+.player-container {
+    text-align: center;
+}
+
 #seasonId {
     height: 40px;
     font-size: 30px;

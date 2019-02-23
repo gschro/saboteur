@@ -12,6 +12,7 @@ namespace saboteur.Interfaces
         Episode GetEpisodeBySeason(int seasonId, int episodeNum);
         Season GetSeasonByCountryNum(string country, int countrySeasonNum);
         IEnumerable<Season> GetSeasons();
-        Quiz GetQuiz(string country, int countrySeasonNum, int episodeNum);
+        Quiz GetQuiz(int seasonId, int episodeNum);
+        QuizQuestion GetQuizQuestion(int seasonId, int episodeNum, int order);
     }
 }

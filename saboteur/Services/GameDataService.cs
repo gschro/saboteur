@@ -40,11 +40,21 @@ namespace saboteur.Services
             return _db.Seasons.OrderBy(n=>n.Country).ThenBy(n=>n.CountrySeasonNum);
         }
 
-        public Quiz GetQuiz(string country, int countrySeasonNum, int episodeNum)
+        public Quiz GetQuiz(int seasonId, int episodeNum)
         {
-            var season = GetSeasonByCountryNum(country, countrySeasonNum);
-            var episode = GetEpisodeBySeason(season.SeasonId, episodeNum);
-            return _db.Quizzes.First(n => n.EpisodeId == episode.EpisodeId);
+            var episode = GetEpisodeBySeason(seasonId, episodeNum);
+            return _db.Quizzes.Include(n=>n.QuizQuestions).First(n => n.EpisodeId == episode.EpisodeId);
+        }
+
+        public QuizQuestion GetQuizQuestion(int seasonId, int episodeNum, int order)
+        {
+            var quizQuestion = _db.QuizQuestions
+                            .Include(n => n.Quiz)
+                            .Include(n => n.Episode)
+                            .First(n => n.Episode.SeasonId == seasonId 
+                                     && n.Episode.EpisodeNum == episodeNum 
+                                     && n.Order == order);
+            return quizQuestion;
         }
     }
 }
