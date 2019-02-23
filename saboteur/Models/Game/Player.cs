@@ -20,14 +20,12 @@ namespace saboteur.Models.Game
         [MaxLength(40)]
         public string Occupation { get; set; }
         public int LocationId { get; set; }
-        public int FinalPlayerStatusId { get; set; }
-        public int PlayerStatusEpisodeId { get; set; }
+        public int FinalPlayerEpisodeId { get; set; }
         public int TotalEarnings { get; set; }
         public string PicutreUrl { get; set; }
 
         public Location Location { get; set; }
-        public PlayerStatus PlayerStatus { get; set; }
-        public Episode PlayerStatusEpisode { get; set; }
+        public EpisodePlayer FinalPlayerEpisode { get; set; }
         public List<MissionPlayer> MissionPlayers { get; set; }
         public List<Reference> References { get; set; }
         public List<PlayerPenalty> PlayerPenalties { get; set; }

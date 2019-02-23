@@ -10,7 +10,7 @@ using saboteur.Data;
 namespace saboteur.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190216054219_InitialCreate")]
+    [Migration("20190223042335_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -128,7 +128,7 @@ namespace saboteur.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("saboteur.Models.DocumentType", b =>
+            modelBuilder.Entity("saboteur.Models.Game.DocumentType", b =>
                 {
                     b.Property<int>("DocumentTypeId")
                         .ValueGeneratedOnAdd();
@@ -145,7 +145,7 @@ namespace saboteur.Migrations
                     );
                 });
 
-            modelBuilder.Entity("saboteur.Models.Episode", b =>
+            modelBuilder.Entity("saboteur.Models.Game.Episode", b =>
                 {
                     b.Property<int>("EpisodeId")
                         .ValueGeneratedOnAdd();
@@ -179,7 +179,7 @@ namespace saboteur.Migrations
                     b.ToTable("Episodes");
 
                     b.HasData(
-                        new { EpisodeId = 1, AirDate = new DateTime(2001, 1, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), EpisodeNum = 1, FullEpisodePublicUrl = "https://www.youtube.com/watch?v=F3tgJwpCFWo", PostQuizPublicUrl = "https://www.youtube.com/embed/F3tgJwpCFWo?start=2167&end=2596&version=3", PreQuizPublicUrl = "https://www.youtube.com/embed/F3tgJwpCFWo?start=0&end=2168&version=3", SeasonId = 1, Title = "Episode 1" }
+                        new { EpisodeId = 1, AirDate = new DateTime(2001, 1, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), EpisodeNum = 1, FullEpisodePublicUrl = "https://www.youtube.com/watch?v=F3tgJwpCFWo", PostQuizPublicUrl = "https://www.youtube.com/embed/F3tgJwpCFWo?start=2167&end=2596&version=3", PreQuizPublicUrl = "https://www.youtube.com/embed/F3tgJwpCFWo?start=1&end=2168&version=3", SeasonId = 1, Title = "Episode 1" }
                     );
                 });
 
@@ -237,9 +237,56 @@ namespace saboteur.Migrations
                     b.Property<string>("State")
                         .HasMaxLength(40);
 
+                    b.Property<string>("StateAbbrev")
+                        .HasMaxLength(40);
+
                     b.HasKey("LocationId");
 
                     b.ToTable("Locations");
+
+                    b.HasData(
+                        new { LocationId = 1, City = "Newton", Country = "USA", PlayerLocation = false, State = "New Jersey", StateAbbrev = "NJ" },
+                        new { LocationId = 2, City = "Colorado Springs", Country = "USA", PlayerLocation = false, State = "Colorado", StateAbbrev = "CO" },
+                        new { LocationId = 3, City = "Denver", Country = "USA", PlayerLocation = false, State = "Colorado", StateAbbrev = "CO" },
+                        new { LocationId = 4, City = "New York", Country = "USA", PlayerLocation = false, State = "New York", StateAbbrev = "NY" },
+                        new { LocationId = 5, City = "Cedar Rapids", Country = "USA", PlayerLocation = false, State = "Iowa", StateAbbrev = "IA" },
+                        new { LocationId = 6, City = "Oxnard", Country = "USA", PlayerLocation = false, State = "California", StateAbbrev = "CA" },
+                        new { LocationId = 7, City = "Cincinnatti", Country = "USA", PlayerLocation = false, State = "Ohio", StateAbbrev = "OH" },
+                        new { LocationId = 8, City = "Chicago", Country = "USA", PlayerLocation = false, State = "Illinois", StateAbbrev = "IL" },
+                        new { LocationId = 9, City = "San Jose", Country = "USA", PlayerLocation = false, State = "California", StateAbbrev = "CA" },
+                        new { LocationId = 10, City = "Miami", Country = "USA", PlayerLocation = false, State = "Florida", StateAbbrev = "FL" }
+                    );
+                });
+
+            modelBuilder.Entity("saboteur.Models.Game.Mission", b =>
+                {
+                    b.Property<int>("MissionId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AmountWon");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000);
+
+                    b.Property<int>("EpisodeId");
+
+                    b.Property<int>("LocationId");
+
+                    b.Property<string>("MissionPublicUrl")
+                        .HasMaxLength(200);
+
+                    b.Property<int>("PossibleEarnings");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(60);
+
+                    b.HasKey("MissionId");
+
+                    b.HasIndex("EpisodeId");
+
+                    b.HasIndex("LocationId");
+
+                    b.ToTable("Missions");
                 });
 
             modelBuilder.Entity("saboteur.Models.Game.MissionPlayer", b =>
@@ -311,6 +358,57 @@ namespace saboteur.Migrations
                     b.ToTable("Penalties");
                 });
 
+            modelBuilder.Entity("saboteur.Models.Game.Player", b =>
+                {
+                    b.Property<int>("PlayerId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Age");
+
+                    b.Property<int?>("FinalPlayerEpisodeEpisodeId");
+
+                    b.Property<int>("FinalPlayerEpisodeId");
+
+                    b.Property<int?>("FinalPlayerEpisodePlayerId");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(20);
+
+                    b.Property<string>("LastName")
+                        .HasMaxLength(20);
+
+                    b.Property<int>("LocationId");
+
+                    b.Property<string>("Occupation")
+                        .HasMaxLength(40);
+
+                    b.Property<string>("PicutreUrl");
+
+                    b.Property<int>("TotalEarnings");
+
+                    b.HasKey("PlayerId");
+
+                    b.HasIndex("LocationId");
+
+                    b.HasIndex("FinalPlayerEpisodeEpisodeId", "FinalPlayerEpisodePlayerId");
+
+                    b.ToTable("Players");
+
+                    b.HasData(
+                        new { PlayerId = 1, Age = 29, FinalPlayerEpisodeId = 10, FirstName = "Jim", LocationId = 1, Occupation = "Helicopter Pilot", TotalEarnings = 0 },
+                        new { PlayerId = 2, Age = 23, FinalPlayerEpisodeId = 1, FirstName = "Afi", LocationId = 2, Occupation = "Med School Applicant", TotalEarnings = 0 },
+                        new { PlayerId = 3, Age = 30, FinalPlayerEpisodeId = 10, FirstName = "Steven", LocationId = 3, Occupation = "Undercover Cop", TotalEarnings = 0 },
+                        new { PlayerId = 4, Age = 63, FinalPlayerEpisodeId = 9, FirstName = "Charlie", LocationId = 4, Occupation = "Retired Police Detective", TotalEarnings = 0 },
+                        new { PlayerId = 5, Age = 29, FinalPlayerEpisodeId = 1, FirstName = "Wendi", LocationId = 5, Occupation = "Visual Display Artist", TotalEarnings = 0 },
+                        new { PlayerId = 6, Age = 42, FinalPlayerEpisodeId = 1, FirstName = "Manuel", LocationId = 6, Occupation = "Event Coordinator", TotalEarnings = 0 },
+                        new { PlayerId = 7, Age = 55, FinalPlayerEpisodeId = 1, FirstName = "Kate", LocationId = 7, Occupation = "Real Estate Investor", TotalEarnings = 0 },
+                        new { PlayerId = 8, Age = 28, FinalPlayerEpisodeId = 10, FirstName = "Kathryn", LocationId = 8, Occupation = "Law School Lecturer", TotalEarnings = 0 },
+                        new { PlayerId = 9, Age = 35, FinalPlayerEpisodeId = 1, FirstName = "Jennifer", LocationId = 9, Occupation = "Field Communication Manager", TotalEarnings = 0 },
+                        new { PlayerId = 10, Age = 23, FinalPlayerEpisodeId = 1, FirstName = "Henry", LocationId = 10, Occupation = "Bartender", TotalEarnings = 0 }
+                    );
+                });
+
             modelBuilder.Entity("saboteur.Models.Game.PlayerPenalty", b =>
                 {
                     b.Property<int>("PlayerId");
@@ -336,6 +434,13 @@ namespace saboteur.Migrations
                     b.HasKey("PlayerStatusId");
 
                     b.ToTable("PlayerStatuses");
+
+                    b.HasData(
+                        new { PlayerStatusId = 1, status = "Executed" },
+                        new { PlayerStatusId = 2, status = "Bribed" },
+                        new { PlayerStatusId = 3, status = "Winner" },
+                        new { PlayerStatusId = 4, status = "The Mole" }
+                    );
                 });
 
             modelBuilder.Entity("saboteur.Models.Game.Quiz", b =>
@@ -363,7 +468,7 @@ namespace saboteur.Migrations
 
             modelBuilder.Entity("saboteur.Models.Game.QuizQuestion", b =>
                 {
-                    b.Property<Guid>("QuizQuestionId")
+                    b.Property<int>("QuizQuestionId")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("EpisodeId");
@@ -373,7 +478,7 @@ namespace saboteur.Migrations
                     b.Property<string>("Question")
                         .HasMaxLength(200);
 
-                    b.Property<int?>("QuizId");
+                    b.Property<int>("QuizId");
 
                     b.HasKey("QuizQuestionId");
 
@@ -382,11 +487,15 @@ namespace saboteur.Migrations
                     b.HasIndex("QuizId");
 
                     b.ToTable("QuizQuestions");
+
+                    b.HasData(
+                        new { QuizQuestionId = 1, EpisodeId = 1, Order = 1, Question = "Is the Mole Male or Female?", QuizId = 1 }
+                    );
                 });
 
             modelBuilder.Entity("saboteur.Models.Game.QuizQuestionChoice", b =>
                 {
-                    b.Property<Guid>("QuizQuestionChoiceId")
+                    b.Property<int>("QuizQuestionChoiceId")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Choice")
@@ -394,87 +503,21 @@ namespace saboteur.Migrations
 
                     b.Property<bool>("Correct");
 
-                    b.Property<Guid>("QuizQuestionId");
+                    b.Property<int>("QuizQuestionId");
 
                     b.HasKey("QuizQuestionChoiceId");
 
                     b.HasIndex("QuizQuestionId");
 
                     b.ToTable("QuizQuestionChoices");
+
+                    b.HasData(
+                        new { QuizQuestionChoiceId = 1, Choice = "Male", Correct = false, QuizQuestionId = 1 },
+                        new { QuizQuestionChoiceId = 2, Choice = "Female", Correct = true, QuizQuestionId = 1 }
+                    );
                 });
 
-            modelBuilder.Entity("saboteur.Models.Mission", b =>
-                {
-                    b.Property<int>("MissionId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("AmountWon");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(1000);
-
-                    b.Property<int>("EpisodeId");
-
-                    b.Property<int>("LocationId");
-
-                    b.Property<string>("MissionPublicUrl")
-                        .HasMaxLength(200);
-
-                    b.Property<int>("PossibleEarnings");
-
-                    b.Property<string>("Title")
-                        .HasMaxLength(60);
-
-                    b.HasKey("MissionId");
-
-                    b.HasIndex("EpisodeId");
-
-                    b.HasIndex("LocationId");
-
-                    b.ToTable("Missions");
-                });
-
-            modelBuilder.Entity("saboteur.Models.Player", b =>
-                {
-                    b.Property<int>("PlayerId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("Age");
-
-                    b.Property<int>("FinalPlayerStatusId");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(20);
-
-                    b.Property<string>("LastName")
-                        .HasMaxLength(20);
-
-                    b.Property<int>("LocationId");
-
-                    b.Property<string>("Occupation")
-                        .HasMaxLength(40);
-
-                    b.Property<string>("PicutreUrl");
-
-                    b.Property<int>("PlayerStatusEpisodeId");
-
-                    b.Property<int?>("PlayerStatusId");
-
-                    b.Property<int>("TotalEarnings");
-
-                    b.HasKey("PlayerId");
-
-                    b.HasIndex("LocationId");
-
-                    b.HasIndex("PlayerStatusEpisodeId");
-
-                    b.HasIndex("PlayerStatusId");
-
-                    b.ToTable("Players");
-                });
-
-            modelBuilder.Entity("saboteur.Models.Reference", b =>
+            modelBuilder.Entity("saboteur.Models.Game.Reference", b =>
                 {
                     b.Property<int>("ReferenceId")
                         .ValueGeneratedOnAdd();
@@ -518,7 +561,7 @@ namespace saboteur.Migrations
                     );
                 });
 
-            modelBuilder.Entity("saboteur.Models.Season", b =>
+            modelBuilder.Entity("saboteur.Models.Game.Season", b =>
                 {
                     b.Property<int>("SeasonId")
                         .ValueGeneratedOnAdd();
@@ -672,7 +715,11 @@ namespace saboteur.Migrations
 
                     b.Property<Guid>("QuizQuestionChoiceId");
 
+                    b.Property<int?>("QuizQuestionChoiceId1");
+
                     b.Property<Guid>("QuizQuestionId");
+
+                    b.Property<int?>("QuizQuestionId1");
 
                     b.Property<DateTime>("StartDateTime");
 
@@ -684,9 +731,9 @@ namespace saboteur.Migrations
 
                     b.HasKey("UserQuizAnswerId");
 
-                    b.HasIndex("QuizQuestionChoiceId");
+                    b.HasIndex("QuizQuestionChoiceId1");
 
-                    b.HasIndex("QuizQuestionId");
+                    b.HasIndex("QuizQuestionId1");
 
                     b.HasIndex("UserQuizId1");
 
@@ -738,9 +785,9 @@ namespace saboteur.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("saboteur.Models.Episode", b =>
+            modelBuilder.Entity("saboteur.Models.Game.Episode", b =>
                 {
-                    b.HasOne("saboteur.Models.Season", "Season")
+                    b.HasOne("saboteur.Models.Game.Season", "Season")
                         .WithMany()
                         .HasForeignKey("SeasonId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -748,12 +795,12 @@ namespace saboteur.Migrations
 
             modelBuilder.Entity("saboteur.Models.Game.EpisodePlayer", b =>
                 {
-                    b.HasOne("saboteur.Models.Episode", "Episode")
+                    b.HasOne("saboteur.Models.Game.Episode", "Episode")
                         .WithMany("EpisodePlayers")
                         .HasForeignKey("EpisodeId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("saboteur.Models.Player", "Player")
+                    b.HasOne("saboteur.Models.Game.Player", "Player")
                         .WithMany("EpisodePlayers")
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -763,9 +810,22 @@ namespace saboteur.Migrations
                         .HasForeignKey("PlayerStatusId1");
                 });
 
+            modelBuilder.Entity("saboteur.Models.Game.Mission", b =>
+                {
+                    b.HasOne("saboteur.Models.Game.Episode", "Episode")
+                        .WithMany("Missions")
+                        .HasForeignKey("EpisodeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("saboteur.Models.Game.Location", "Location")
+                        .WithMany()
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("saboteur.Models.Game.MissionPlayer", b =>
                 {
-                    b.HasOne("saboteur.Models.Mission", "Mission")
+                    b.HasOne("saboteur.Models.Game.Mission", "Mission")
                         .WithMany("MissionPlayers")
                         .HasForeignKey("MissionId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -780,7 +840,7 @@ namespace saboteur.Migrations
                         .HasForeignKey("MissionSortId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("saboteur.Models.Player", "Player")
+                    b.HasOne("saboteur.Models.Game.Player", "Player")
                         .WithMany("MissionPlayers")
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -788,15 +848,27 @@ namespace saboteur.Migrations
 
             modelBuilder.Entity("saboteur.Models.Game.Penalty", b =>
                 {
-                    b.HasOne("saboteur.Models.Episode", "Episode")
+                    b.HasOne("saboteur.Models.Game.Episode", "Episode")
                         .WithMany()
                         .HasForeignKey("EpisodeId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("saboteur.Models.Mission", "Mission")
+                    b.HasOne("saboteur.Models.Game.Mission", "Mission")
                         .WithMany()
                         .HasForeignKey("MissionId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("saboteur.Models.Game.Player", b =>
+                {
+                    b.HasOne("saboteur.Models.Game.Location", "Location")
+                        .WithMany()
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("saboteur.Models.Game.EpisodePlayer", "FinalPlayerEpisode")
+                        .WithMany()
+                        .HasForeignKey("FinalPlayerEpisodeEpisodeId", "FinalPlayerEpisodePlayerId");
                 });
 
             modelBuilder.Entity("saboteur.Models.Game.PlayerPenalty", b =>
@@ -806,7 +878,7 @@ namespace saboteur.Migrations
                         .HasForeignKey("PenaltyId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("saboteur.Models.Player", "Player")
+                    b.HasOne("saboteur.Models.Game.Player", "Player")
                         .WithMany("PlayerPenalties")
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -814,21 +886,22 @@ namespace saboteur.Migrations
 
             modelBuilder.Entity("saboteur.Models.Game.Quiz", b =>
                 {
-                    b.HasOne("saboteur.Models.Episode", "Episode")
+                    b.HasOne("saboteur.Models.Game.Episode", "Episode")
                         .WithOne("Quiz")
                         .HasForeignKey("saboteur.Models.Game.Quiz", "EpisodeId");
                 });
 
             modelBuilder.Entity("saboteur.Models.Game.QuizQuestion", b =>
                 {
-                    b.HasOne("saboteur.Models.Episode", "Episode")
+                    b.HasOne("saboteur.Models.Game.Episode", "Episode")
                         .WithMany()
                         .HasForeignKey("EpisodeId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("saboteur.Models.Game.Quiz")
+                    b.HasOne("saboteur.Models.Game.Quiz", "Quiz")
                         .WithMany("QuizQuestions")
-                        .HasForeignKey("QuizId");
+                        .HasForeignKey("QuizId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("saboteur.Models.Game.QuizQuestionChoice", b =>
@@ -839,61 +912,31 @@ namespace saboteur.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("saboteur.Models.Mission", b =>
+            modelBuilder.Entity("saboteur.Models.Game.Reference", b =>
                 {
-                    b.HasOne("saboteur.Models.Episode", "Episode")
-                        .WithMany("Missions")
-                        .HasForeignKey("EpisodeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("saboteur.Models.Game.Location", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("saboteur.Models.Player", b =>
-                {
-                    b.HasOne("saboteur.Models.Game.Location", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("saboteur.Models.Episode", "PlayerStatusEpisode")
-                        .WithMany()
-                        .HasForeignKey("PlayerStatusEpisodeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("saboteur.Models.Game.PlayerStatus", "PlayerStatus")
-                        .WithMany()
-                        .HasForeignKey("PlayerStatusId");
-                });
-
-            modelBuilder.Entity("saboteur.Models.Reference", b =>
-                {
-                    b.HasOne("saboteur.Models.DocumentType", "DocumentType")
+                    b.HasOne("saboteur.Models.Game.DocumentType", "DocumentType")
                         .WithMany()
                         .HasForeignKey("DocumentTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("saboteur.Models.Episode", "Episode")
+                    b.HasOne("saboteur.Models.Game.Episode", "Episode")
                         .WithMany("References")
                         .HasForeignKey("EpisodeId");
 
-                    b.HasOne("saboteur.Models.Mission")
+                    b.HasOne("saboteur.Models.Game.Mission")
                         .WithMany("References")
                         .HasForeignKey("MissionId");
 
-                    b.HasOne("saboteur.Models.Player", "Player")
+                    b.HasOne("saboteur.Models.Game.Player", "Player")
                         .WithMany("References")
                         .HasForeignKey("PlayerId");
 
-                    b.HasOne("saboteur.Models.Season")
+                    b.HasOne("saboteur.Models.Game.Season")
                         .WithMany("References")
                         .HasForeignKey("SeasonId");
                 });
 
-            modelBuilder.Entity("saboteur.Models.Season", b =>
+            modelBuilder.Entity("saboteur.Models.Game.Season", b =>
                 {
                     b.HasOne("saboteur.Models.Game.Host", "Host")
                         .WithMany("Seasons")
@@ -903,7 +946,7 @@ namespace saboteur.Migrations
 
             modelBuilder.Entity("saboteur.Models.Users.UserQuiz", b =>
                 {
-                    b.HasOne("saboteur.Models.Episode", "Episode")
+                    b.HasOne("saboteur.Models.Game.Episode", "Episode")
                         .WithMany()
                         .HasForeignKey("EpisodeId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -917,13 +960,11 @@ namespace saboteur.Migrations
                 {
                     b.HasOne("saboteur.Models.Game.QuizQuestionChoice", "QuizQuestionChoice")
                         .WithMany()
-                        .HasForeignKey("QuizQuestionChoiceId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("QuizQuestionChoiceId1");
 
                     b.HasOne("saboteur.Models.Game.QuizQuestion", "QuizQuestion")
                         .WithMany()
-                        .HasForeignKey("QuizQuestionId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("QuizQuestionId1");
 
                     b.HasOne("saboteur.Models.Users.UserQuiz", "UserQuiz")
                         .WithMany("UserQuizAnswers")

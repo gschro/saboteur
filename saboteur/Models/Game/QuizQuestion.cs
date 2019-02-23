@@ -10,8 +10,7 @@ namespace saboteur.Models.Game
     public class QuizQuestion
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid QuizQuestionId { get; set; }
+        public int QuizQuestionId { get; set; }
         public int EpisodeId { get; set; }
         public int QuizId { get; set; }
         public int Order { get; set; }

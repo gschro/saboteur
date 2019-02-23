@@ -90,6 +90,7 @@ namespace saboteur.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     City = table.Column<string>(maxLength: 40, nullable: true),
                     State = table.Column<string>(maxLength: 40, nullable: true),
+                    StateAbbrev = table.Column<string>(maxLength: 40, nullable: true),
                     Country = table.Column<string>(maxLength: 40, nullable: true),
                     Description = table.Column<string>(maxLength: 200, nullable: true),
                     PlayerLocation = table.Column<bool>(nullable: false)
@@ -331,46 +332,6 @@ namespace saboteur.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Players",
-                columns: table => new
-                {
-                    PlayerId = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    FirstName = table.Column<string>(maxLength: 20, nullable: false),
-                    LastName = table.Column<string>(maxLength: 20, nullable: true),
-                    Age = table.Column<int>(nullable: false),
-                    Occupation = table.Column<string>(maxLength: 40, nullable: true),
-                    LocationId = table.Column<int>(nullable: false),
-                    FinalPlayerStatusId = table.Column<int>(nullable: false),
-                    PlayerStatusEpisodeId = table.Column<int>(nullable: false),
-                    TotalEarnings = table.Column<int>(nullable: false),
-                    PicutreUrl = table.Column<string>(nullable: true),
-                    PlayerStatusId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Players", x => x.PlayerId);
-                    table.ForeignKey(
-                        name: "FK_Players_Locations_LocationId",
-                        column: x => x.LocationId,
-                        principalTable: "Locations",
-                        principalColumn: "LocationId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Players_Episodes_PlayerStatusEpisodeId",
-                        column: x => x.PlayerStatusEpisodeId,
-                        principalTable: "Episodes",
-                        principalColumn: "EpisodeId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Players_PlayerStatuses_PlayerStatusId",
-                        column: x => x.PlayerStatusId,
-                        principalTable: "PlayerStatuses",
-                        principalColumn: "PlayerStatusId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Quizzes",
                 columns: table => new
                 {
@@ -448,6 +409,167 @@ namespace saboteur.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "QuizQuestions",
+                columns: table => new
+                {
+                    QuizQuestionId = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    EpisodeId = table.Column<int>(nullable: false),
+                    QuizId = table.Column<int>(nullable: false),
+                    Order = table.Column<int>(nullable: false),
+                    Question = table.Column<string>(maxLength: 200, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_QuizQuestions", x => x.QuizQuestionId);
+                    table.ForeignKey(
+                        name: "FK_QuizQuestions_Episodes_EpisodeId",
+                        column: x => x.EpisodeId,
+                        principalTable: "Episodes",
+                        principalColumn: "EpisodeId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_QuizQuestions_Quizzes_QuizId",
+                        column: x => x.QuizId,
+                        principalTable: "Quizzes",
+                        principalColumn: "QuizId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "QuizQuestionChoices",
+                columns: table => new
+                {
+                    QuizQuestionChoiceId = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    QuizQuestionId = table.Column<int>(nullable: false),
+                    Choice = table.Column<string>(maxLength: 200, nullable: true),
+                    Correct = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_QuizQuestionChoices", x => x.QuizQuestionChoiceId);
+                    table.ForeignKey(
+                        name: "FK_QuizQuestionChoices_QuizQuestions_QuizQuestionId",
+                        column: x => x.QuizQuestionId,
+                        principalTable: "QuizQuestions",
+                        principalColumn: "QuizQuestionId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserQuizAnswers",
+                columns: table => new
+                {
+                    UserQuizAnswerId = table.Column<Guid>(nullable: false),
+                    UserQuizId = table.Column<string>(nullable: true),
+                    QuizQuestionId = table.Column<Guid>(nullable: false),
+                    QuizQuestionChoiceId = table.Column<Guid>(nullable: false),
+                    QuizAnswerCorrect = table.Column<bool>(nullable: false),
+                    TotalSeconds = table.Column<int>(nullable: false),
+                    StartDateTime = table.Column<DateTime>(nullable: false),
+                    EndDateTime = table.Column<DateTime>(nullable: false),
+                    UserQuizId1 = table.Column<Guid>(nullable: true),
+                    QuizQuestionId1 = table.Column<int>(nullable: true),
+                    QuizQuestionChoiceId1 = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserQuizAnswers", x => x.UserQuizAnswerId);
+                    table.ForeignKey(
+                        name: "FK_UserQuizAnswers_QuizQuestionChoices_QuizQuestionChoiceId1",
+                        column: x => x.QuizQuestionChoiceId1,
+                        principalTable: "QuizQuestionChoices",
+                        principalColumn: "QuizQuestionChoiceId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UserQuizAnswers_QuizQuestions_QuizQuestionId1",
+                        column: x => x.QuizQuestionId1,
+                        principalTable: "QuizQuestions",
+                        principalColumn: "QuizQuestionId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UserQuizAnswers_UserQuizzes_UserQuizId1",
+                        column: x => x.UserQuizId1,
+                        principalTable: "UserQuizzes",
+                        principalColumn: "UserQuizId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "References",
+                columns: table => new
+                {
+                    ReferenceId = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    DocumentId = table.Column<int>(nullable: false),
+                    DocumentTypeId = table.Column<int>(nullable: false),
+                    DateRetrieved = table.Column<DateTime>(nullable: false),
+                    Url = table.Column<string>(maxLength: 200, nullable: true),
+                    Title = table.Column<string>(maxLength: 60, nullable: true),
+                    PlayerId = table.Column<int>(nullable: true),
+                    EpisodeId = table.Column<int>(nullable: true),
+                    MissionId = table.Column<int>(nullable: true),
+                    SeasonId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_References", x => x.ReferenceId);
+                    table.ForeignKey(
+                        name: "FK_References_DocumentType_DocumentTypeId",
+                        column: x => x.DocumentTypeId,
+                        principalTable: "DocumentType",
+                        principalColumn: "DocumentTypeId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_References_Episodes_EpisodeId",
+                        column: x => x.EpisodeId,
+                        principalTable: "Episodes",
+                        principalColumn: "EpisodeId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_References_Missions_MissionId",
+                        column: x => x.MissionId,
+                        principalTable: "Missions",
+                        principalColumn: "MissionId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_References_Seasons_SeasonId",
+                        column: x => x.SeasonId,
+                        principalTable: "Seasons",
+                        principalColumn: "SeasonId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Players",
+                columns: table => new
+                {
+                    PlayerId = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    FirstName = table.Column<string>(maxLength: 20, nullable: false),
+                    LastName = table.Column<string>(maxLength: 20, nullable: true),
+                    Age = table.Column<int>(nullable: false),
+                    Occupation = table.Column<string>(maxLength: 40, nullable: true),
+                    LocationId = table.Column<int>(nullable: false),
+                    FinalPlayerEpisodeId = table.Column<int>(nullable: false),
+                    TotalEarnings = table.Column<int>(nullable: false),
+                    PicutreUrl = table.Column<string>(nullable: true),
+                    FinalPlayerEpisodeEpisodeId = table.Column<int>(nullable: true),
+                    FinalPlayerEpisodePlayerId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Players", x => x.PlayerId);
+                    table.ForeignKey(
+                        name: "FK_Players_Locations_LocationId",
+                        column: x => x.LocationId,
+                        principalTable: "Locations",
+                        principalColumn: "LocationId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "EpisodePlayers",
                 columns: table => new
                 {
@@ -517,84 +639,6 @@ namespace saboteur.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "References",
-                columns: table => new
-                {
-                    ReferenceId = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    DocumentId = table.Column<int>(nullable: false),
-                    DocumentTypeId = table.Column<int>(nullable: false),
-                    DateRetrieved = table.Column<DateTime>(nullable: false),
-                    Url = table.Column<string>(maxLength: 200, nullable: true),
-                    Title = table.Column<string>(maxLength: 60, nullable: true),
-                    PlayerId = table.Column<int>(nullable: true),
-                    EpisodeId = table.Column<int>(nullable: true),
-                    MissionId = table.Column<int>(nullable: true),
-                    SeasonId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_References", x => x.ReferenceId);
-                    table.ForeignKey(
-                        name: "FK_References_DocumentType_DocumentTypeId",
-                        column: x => x.DocumentTypeId,
-                        principalTable: "DocumentType",
-                        principalColumn: "DocumentTypeId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_References_Episodes_EpisodeId",
-                        column: x => x.EpisodeId,
-                        principalTable: "Episodes",
-                        principalColumn: "EpisodeId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_References_Missions_MissionId",
-                        column: x => x.MissionId,
-                        principalTable: "Missions",
-                        principalColumn: "MissionId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_References_Players_PlayerId",
-                        column: x => x.PlayerId,
-                        principalTable: "Players",
-                        principalColumn: "PlayerId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_References_Seasons_SeasonId",
-                        column: x => x.SeasonId,
-                        principalTable: "Seasons",
-                        principalColumn: "SeasonId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "QuizQuestions",
-                columns: table => new
-                {
-                    QuizQuestionId = table.Column<Guid>(nullable: false),
-                    EpisodeId = table.Column<int>(nullable: false),
-                    Order = table.Column<int>(nullable: false),
-                    Question = table.Column<string>(maxLength: 200, nullable: true),
-                    QuizId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_QuizQuestions", x => x.QuizQuestionId);
-                    table.ForeignKey(
-                        name: "FK_QuizQuestions_Episodes_EpisodeId",
-                        column: x => x.EpisodeId,
-                        principalTable: "Episodes",
-                        principalColumn: "EpisodeId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_QuizQuestions_Quizzes_QuizId",
-                        column: x => x.QuizId,
-                        principalTable: "Quizzes",
-                        principalColumn: "QuizId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "PlayerPenalty",
                 columns: table => new
                 {
@@ -618,63 +662,6 @@ namespace saboteur.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "QuizQuestionChoices",
-                columns: table => new
-                {
-                    QuizQuestionChoiceId = table.Column<Guid>(nullable: false),
-                    QuizQuestionId = table.Column<Guid>(nullable: false),
-                    Choice = table.Column<string>(maxLength: 200, nullable: true),
-                    Correct = table.Column<bool>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_QuizQuestionChoices", x => x.QuizQuestionChoiceId);
-                    table.ForeignKey(
-                        name: "FK_QuizQuestionChoices_QuizQuestions_QuizQuestionId",
-                        column: x => x.QuizQuestionId,
-                        principalTable: "QuizQuestions",
-                        principalColumn: "QuizQuestionId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserQuizAnswers",
-                columns: table => new
-                {
-                    UserQuizAnswerId = table.Column<Guid>(nullable: false),
-                    UserQuizId = table.Column<string>(nullable: true),
-                    QuizQuestionId = table.Column<Guid>(nullable: false),
-                    QuizQuestionChoiceId = table.Column<Guid>(nullable: false),
-                    QuizAnswerCorrect = table.Column<bool>(nullable: false),
-                    TotalSeconds = table.Column<int>(nullable: false),
-                    StartDateTime = table.Column<DateTime>(nullable: false),
-                    EndDateTime = table.Column<DateTime>(nullable: false),
-                    UserQuizId1 = table.Column<Guid>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserQuizAnswers", x => x.UserQuizAnswerId);
-                    table.ForeignKey(
-                        name: "FK_UserQuizAnswers_QuizQuestionChoices_QuizQuestionChoiceId",
-                        column: x => x.QuizQuestionChoiceId,
-                        principalTable: "QuizQuestionChoices",
-                        principalColumn: "QuizQuestionChoiceId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserQuizAnswers_QuizQuestions_QuizQuestionId",
-                        column: x => x.QuizQuestionId,
-                        principalTable: "QuizQuestions",
-                        principalColumn: "QuizQuestionId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserQuizAnswers_UserQuizzes_UserQuizId1",
-                        column: x => x.UserQuizId1,
-                        principalTable: "UserQuizzes",
-                        principalColumn: "UserQuizId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
             migrationBuilder.InsertData(
                 table: "DocumentType",
                 columns: new[] { "DocumentTypeId", "Type" },
@@ -684,6 +671,51 @@ namespace saboteur.Migrations
                 table: "Hosts",
                 columns: new[] { "HostId", "Name" },
                 values: new object[] { 1, "Anderson Cooper" });
+
+            migrationBuilder.InsertData(
+                table: "Locations",
+                columns: new[] { "LocationId", "City", "Country", "Description", "PlayerLocation", "State", "StateAbbrev" },
+                values: new object[,]
+                {
+                    { 1, "Newton", "USA", null, false, "New Jersey", "NJ" },
+                    { 2, "Colorado Springs", "USA", null, false, "Colorado", "CO" },
+                    { 3, "Denver", "USA", null, false, "Colorado", "CO" },
+                    { 4, "New York", "USA", null, false, "New York", "NY" },
+                    { 5, "Cedar Rapids", "USA", null, false, "Iowa", "IA" },
+                    { 6, "Oxnard", "USA", null, false, "California", "CA" },
+                    { 7, "Cincinnatti", "USA", null, false, "Ohio", "OH" },
+                    { 8, "Chicago", "USA", null, false, "Illinois", "IL" },
+                    { 9, "San Jose", "USA", null, false, "California", "CA" },
+                    { 10, "Miami", "USA", null, false, "Florida", "FL" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "PlayerStatuses",
+                columns: new[] { "PlayerStatusId", "status" },
+                values: new object[,]
+                {
+                    { 1, "Executed" },
+                    { 2, "Bribed" },
+                    { 3, "Winner" },
+                    { 4, "The Mole" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Players",
+                columns: new[] { "PlayerId", "Age", "FinalPlayerEpisodeEpisodeId", "FinalPlayerEpisodeId", "FinalPlayerEpisodePlayerId", "FirstName", "LastName", "LocationId", "Occupation", "PicutreUrl", "TotalEarnings" },
+                values: new object[,]
+                {
+                    { 1, 29, null, 10, null, "Jim", null, 1, "Helicopter Pilot", null, 0 },
+                    { 2, 23, null, 1, null, "Afi", null, 2, "Med School Applicant", null, 0 },
+                    { 3, 30, null, 10, null, "Steven", null, 3, "Undercover Cop", null, 0 },
+                    { 4, 63, null, 9, null, "Charlie", null, 4, "Retired Police Detective", null, 0 },
+                    { 5, 29, null, 1, null, "Wendi", null, 5, "Visual Display Artist", null, 0 },
+                    { 6, 42, null, 1, null, "Manuel", null, 6, "Event Coordinator", null, 0 },
+                    { 7, 55, null, 1, null, "Kate", null, 7, "Real Estate Investor", null, 0 },
+                    { 8, 28, null, 10, null, "Kathryn", null, 8, "Law School Lecturer", null, 0 },
+                    { 9, 35, null, 1, null, "Jennifer", null, 9, "Field Communication Manager", null, 0 },
+                    { 10, 23, null, 1, null, "Henry", null, 10, "Bartender", null, 0 }
+                });
 
             migrationBuilder.InsertData(
                 table: "References",
@@ -698,12 +730,26 @@ namespace saboteur.Migrations
             migrationBuilder.InsertData(
                 table: "Episodes",
                 columns: new[] { "EpisodeId", "AirDate", "Description", "EpisodeNum", "FullEpisodePublicUrl", "PostQuizPublicUrl", "PreQuizPublicUrl", "SeasonId", "Title" },
-                values: new object[] { 1, new DateTime(2001, 1, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 1, "https://www.youtube.com/watch?v=F3tgJwpCFWo", "https://www.youtube.com/embed/F3tgJwpCFWo?start=2167&end=2596&version=3", "https://www.youtube.com/embed/F3tgJwpCFWo?start=0&end=2168&version=3", 1, "Episode 1" });
+                values: new object[] { 1, new DateTime(2001, 1, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 1, "https://www.youtube.com/watch?v=F3tgJwpCFWo", "https://www.youtube.com/embed/F3tgJwpCFWo?start=2167&end=2596&version=3", "https://www.youtube.com/embed/F3tgJwpCFWo?start=1&end=2168&version=3", 1, "Episode 1" });
 
             migrationBuilder.InsertData(
                 table: "Quizzes",
                 columns: new[] { "QuizId", "EpisodeId", "Title" },
                 values: new object[] { 1, 1, "Execution 1 Quiz" });
+
+            migrationBuilder.InsertData(
+                table: "QuizQuestions",
+                columns: new[] { "QuizQuestionId", "EpisodeId", "Order", "Question", "QuizId" },
+                values: new object[] { 1, 1, 1, "Is the Mole Male or Female?", 1 });
+
+            migrationBuilder.InsertData(
+                table: "QuizQuestionChoices",
+                columns: new[] { "QuizQuestionChoiceId", "Choice", "Correct", "QuizQuestionId" },
+                values: new object[,]
+                {
+                    { 1, "Male", false, 1 },
+                    { 2, "Female", true, 1 }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -803,14 +849,9 @@ namespace saboteur.Migrations
                 column: "LocationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Players_PlayerStatusEpisodeId",
+                name: "IX_Players_FinalPlayerEpisodeEpisodeId_FinalPlayerEpisodePlaye~",
                 table: "Players",
-                column: "PlayerStatusEpisodeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Players_PlayerStatusId",
-                table: "Players",
-                column: "PlayerStatusId");
+                columns: new[] { "FinalPlayerEpisodeEpisodeId", "FinalPlayerEpisodePlayerId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_QuizQuestionChoices_QuizQuestionId",
@@ -864,14 +905,14 @@ namespace saboteur.Migrations
                 column: "HostId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserQuizAnswers_QuizQuestionChoiceId",
+                name: "IX_UserQuizAnswers_QuizQuestionChoiceId1",
                 table: "UserQuizAnswers",
-                column: "QuizQuestionChoiceId");
+                column: "QuizQuestionChoiceId1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserQuizAnswers_QuizQuestionId",
+                name: "IX_UserQuizAnswers_QuizQuestionId1",
                 table: "UserQuizAnswers",
-                column: "QuizQuestionId");
+                column: "QuizQuestionId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserQuizAnswers_UserQuizId1",
@@ -887,10 +928,34 @@ namespace saboteur.Migrations
                 name: "IX_UserQuizzes_UserId",
                 table: "UserQuizzes",
                 column: "UserId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_References_Players_PlayerId",
+                table: "References",
+                column: "PlayerId",
+                principalTable: "Players",
+                principalColumn: "PlayerId",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Players_EpisodePlayers_FinalPlayerEpisodeEpisodeId_FinalPla~",
+                table: "Players",
+                columns: new[] { "FinalPlayerEpisodeEpisodeId", "FinalPlayerEpisodePlayerId" },
+                principalTable: "EpisodePlayers",
+                principalColumns: new[] { "EpisodeId", "PlayerId" },
+                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_EpisodePlayers_Episodes_EpisodeId",
+                table: "EpisodePlayers");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_EpisodePlayers_Players_PlayerId",
+                table: "EpisodePlayers");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -905,9 +970,6 @@ namespace saboteur.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
-
-            migrationBuilder.DropTable(
-                name: "EpisodePlayers");
 
             migrationBuilder.DropTable(
                 name: "MissionPlayers");
@@ -937,9 +999,6 @@ namespace saboteur.Migrations
                 name: "DocumentType");
 
             migrationBuilder.DropTable(
-                name: "Players");
-
-            migrationBuilder.DropTable(
                 name: "QuizQuestionChoices");
 
             migrationBuilder.DropTable(
@@ -949,16 +1008,10 @@ namespace saboteur.Migrations
                 name: "Missions");
 
             migrationBuilder.DropTable(
-                name: "PlayerStatuses");
-
-            migrationBuilder.DropTable(
                 name: "QuizQuestions");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "Locations");
 
             migrationBuilder.DropTable(
                 name: "Quizzes");
@@ -971,6 +1024,18 @@ namespace saboteur.Migrations
 
             migrationBuilder.DropTable(
                 name: "Hosts");
+
+            migrationBuilder.DropTable(
+                name: "Players");
+
+            migrationBuilder.DropTable(
+                name: "Locations");
+
+            migrationBuilder.DropTable(
+                name: "EpisodePlayers");
+
+            migrationBuilder.DropTable(
+                name: "PlayerStatuses");
         }
     }
 }

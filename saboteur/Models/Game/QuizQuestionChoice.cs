@@ -9,8 +9,8 @@ namespace saboteur.Models.Game
     public class QuizQuestionChoice
     {
         [Key]
-        public Guid QuizQuestionChoiceId { get; set; }
-        public Guid QuizQuestionId { get; set; }
+        public int QuizQuestionChoiceId { get; set; }
+        public int QuizQuestionId { get; set; }
         [MaxLength(200)]
         public string Choice { get; set; }
         public bool Correct { get; set; }

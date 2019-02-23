@@ -15,6 +15,8 @@ namespace saboteur.Models.Game
         [MaxLength(40)]
         public string State { get; set; }
         [MaxLength(40)]
+        public string StateAbbrev { get; set; }
+        [MaxLength(40)]
         public string Country { get; set; }
         [MaxLength(200)]
         public string Description { get; set; }

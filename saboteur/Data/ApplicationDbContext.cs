@@ -71,6 +71,29 @@ namespace saboteur.Data
                 new Host() { HostId = 1, Name = "Anderson Cooper" });
             #endregion
 
+            #region PlayerStatusSeed
+            builder.Entity<PlayerStatus>().HasData(
+                new PlayerStatus() { PlayerStatusId = 1, status = "Executed"},
+                new PlayerStatus() { PlayerStatusId = 2, status = "Bribed" },
+                new PlayerStatus() { PlayerStatusId = 3, status = "Winner" },
+                new PlayerStatus() { PlayerStatusId = 4, status = "The Mole" });
+            #endregion
+
+
+            #region LocationSeed
+            builder.Entity<Location>().HasData(
+                new Location() { LocationId = 1, City = "Newton", State = "New Jersey", StateAbbrev = "NJ", Country = "USA" },
+                new Location() { LocationId = 2, City = "Colorado Springs", State = "Colorado", StateAbbrev = "CO", Country = "USA" },
+                new Location() { LocationId = 3, City = "Denver", State = "Colorado", StateAbbrev = "CO", Country = "USA" },
+                new Location() { LocationId = 4, City = "New York", State = "New York", StateAbbrev = "NY", Country = "USA" },
+                new Location() { LocationId = 5, City = "Cedar Rapids", State = "Iowa", StateAbbrev = "IA", Country = "USA" },
+                new Location() { LocationId = 6, City = "Oxnard", State = "California", StateAbbrev = "CA", Country = "USA" },
+                new Location() { LocationId = 7, City = "Cincinnatti", State = "Ohio", StateAbbrev = "OH", Country = "USA" },
+                new Location() { LocationId = 8, City = "Chicago", State = "Illinois", StateAbbrev = "IL", Country = "USA" },
+                new Location() { LocationId = 9, City = "San Jose", State = "California", StateAbbrev = "CA", Country = "USA" },
+                new Location() { LocationId = 10, City = "Miami", State = "Florida", StateAbbrev = "FL", Country = "USA" });
+            #endregion
+
             #region SeasonSeed
             builder.Entity<Season>().HasData(
                 new Season() { SeasonId = 1, Country = "USA", Title = "The Mole", CountrySeasonNum = 1, HostId = 1, Station = "ABC", StartDate = new DateTime(2001, 1, 9), EndDate = new DateTime(2001, 2, 28), MaxPot = 1000000, EarnedPot = 510000, PublicUrl = "https://www.youtube.com/watch?v=F3tgJwpCFWo&list=PL09numCPHqBQLU0q7VY1PsOBmrF860gt3", PurchaseUrl = "https://www.amazon.com/Mole-Complete-First-Season/dp/B0007GAEXK" });
@@ -85,32 +108,57 @@ namespace saboteur.Data
             #endregion
 
             #region PlayerSeed
-            //builder.Entity<Player>().HasData(
-            //    new Player() { });
+            builder.Entity<Player>().HasData(
+                new Player() { PlayerId = 1, FirstName = "Jim", Age = 29, Occupation = "Helicopter Pilot", LocationId = 1, FinalPlayerEpisodeId = 10 },
+                new Player() { PlayerId = 2, FirstName = "Afi", Age = 23, Occupation = "Med School Applicant", LocationId = 2, FinalPlayerEpisodeId = 1 },
+                new Player() { PlayerId = 3, FirstName = "Steven", Age = 30, Occupation = "Undercover Cop", LocationId = 3, FinalPlayerEpisodeId = 10 },
+                new Player() { PlayerId = 4, FirstName = "Charlie", Age = 63, Occupation = "Retired Police Detective", LocationId = 4, FinalPlayerEpisodeId = 9 },
+                new Player() { PlayerId = 5, FirstName = "Wendi", Age = 29, Occupation = "Visual Display Artist", LocationId = 5, FinalPlayerEpisodeId = 1 },
+                new Player() { PlayerId = 6, FirstName = "Manuel", Age = 42, Occupation = "Event Coordinator", LocationId = 6, FinalPlayerEpisodeId = 1 },
+                new Player() { PlayerId = 7, FirstName = "Kate", Age = 55, Occupation = "Real Estate Investor", LocationId = 7, FinalPlayerEpisodeId = 1 },
+                new Player() { PlayerId = 8, FirstName = "Kathryn", Age = 28, Occupation = "Law School Lecturer", LocationId = 8, FinalPlayerEpisodeId = 10 },
+                new Player() { PlayerId = 9, FirstName = "Jennifer", Age = 35, Occupation = "Field Communication Manager", LocationId = 9, FinalPlayerEpisodeId = 1 },
+                new Player() { PlayerId = 10, FirstName = "Henry", Age = 23, Occupation = "Bartender", LocationId = 10, FinalPlayerEpisodeId = 1 }
+                );
+            #endregion
+
+            #region PlayerEpisodeSeed
             #endregion
 
             #region QuizSeed
-                builder.Entity<Quiz>().HasData(new Quiz() { QuizId = 1, EpisodeId = 1, Title = "Execution 1 Quiz" });
+            builder.Entity<Quiz>().HasData(
+                    new Quiz() { QuizId = 1, EpisodeId = 1, Title = "Execution 1 Quiz" });
+            #endregion
+
+            #region QuizQuestion
+                builder.Entity<QuizQuestion>().HasData(
+                    new QuizQuestion() { QuizQuestionId = 1, QuizId = 1, EpisodeId = 1, Order = 1, Question = "Is the Mole Male or Female?" });
+            #endregion
+
+            #region QuizQuestionChoice
+            builder.Entity<QuizQuestionChoice>().HasData(
+                new QuizQuestionChoice() { QuizQuestionChoiceId = 1, QuizQuestionId = 1, Choice = "Male", Correct = false },
+                new QuizQuestionChoice() { QuizQuestionChoiceId = 2, QuizQuestionId = 1, Choice = "Female", Correct = true });
             #endregion
         }
 
-            public DbSet<Episode> Episodes { get; set; }
-            public DbSet<Location> Locations { get; set; }
-            public DbSet<Mission> Missions { get; set; }
-            public DbSet<MissionPlayer> MissionPlayers { get; set; }
-            public DbSet<Penalty> Penalties { get; set; }
-            public DbSet<Player> Players { get; set; }
-            public DbSet<PlayerStatus> PlayerStatuses { get; set; }
-            public DbSet<QuizQuestion> QuizQuestions { get; set; }
-            public DbSet<QuizQuestionChoice> QuizQuestionChoices { get; set; }
-            public DbSet<Reference> References { get; set; }
-            public DbSet<Season> Seasons { get; set; }
-            public DbSet<UserQuiz> UserQuizzes { get; set; }
-            public DbSet<UserQuizAnswer> UserQuizAnswers { get; set; }
-            public DbSet<Host> Hosts { get; set; }
-            public DbSet<Quiz> Quizzes { get; set; }
-            public DbSet<MissionSort> MissionSorts { get; set; }
-            public DbSet<MissionRole> MissionRoles { get; set; }
-            public DbSet<EpisodePlayer> EpisodePlayers { get; set; }
+        public DbSet<Episode> Episodes { get; set; }
+        public DbSet<Location> Locations { get; set; }
+        public DbSet<Mission> Missions { get; set; }
+        public DbSet<MissionPlayer> MissionPlayers { get; set; }
+        public DbSet<Penalty> Penalties { get; set; }
+        public DbSet<Player> Players { get; set; }
+        public DbSet<PlayerStatus> PlayerStatuses { get; set; }
+        public DbSet<QuizQuestion> QuizQuestions { get; set; }
+        public DbSet<QuizQuestionChoice> QuizQuestionChoices { get; set; }
+        public DbSet<Reference> References { get; set; }
+        public DbSet<Season> Seasons { get; set; }
+        public DbSet<UserQuiz> UserQuizzes { get; set; }
+        public DbSet<UserQuizAnswer> UserQuizAnswers { get; set; }
+        public DbSet<Host> Hosts { get; set; }
+        public DbSet<Quiz> Quizzes { get; set; }
+        public DbSet<MissionSort> MissionSorts { get; set; }
+        public DbSet<MissionRole> MissionRoles { get; set; }
+        public DbSet<EpisodePlayer> EpisodePlayers { get; set; }
     }
 }
